@@ -1,4 +1,5 @@
 name: scp files
+
 on: 
   push:
     branches:
@@ -8,8 +9,8 @@ on:
 
 jobs:
 
-  build-and-copy:
-    name: Build and Copy
+  main:
+    name: main
     runs-on: ubuntu-latest
 
     steps:
@@ -23,9 +24,13 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.KEY }}
           source: "*"
-          target: /home/ubuntu/main      
-         
-      
+          target: /home/ubuntu/main
+
+  pre_prod:
+    name: pre_prod
+    runs-on: ubuntu-latest
+  
+    steps:
       - name: 'Push on pre_prod'
         if: ${{ github.ref == 'refs/heads/pre_prod' }}
         uses: appleboy/scp-action@v0.1.7
@@ -37,14 +42,18 @@ jobs:
           source: "*"
           target: /home/ubuntu/pre_prod
 
+  prod:
+    name: prod
+    runs-on: ubuntu-latest
+    
+    steps:
       - name: 'Push on prod'
         if: ${{ github.ref == 'refs/heads/prod' }}
         uses: appleboy/scp-action@v0.1.7
         with:
-            host: ${{ secrets.HOST }}
-            username: ${{ secrets.USERNAME }}
-            port: ${{ secrets.PORT }}
-            key: ${{ secrets.KEY }}
-            source: "*"
-            target: /home/ubuntu/prod
-  
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.KEY }}
+          source: "*"
+          target: /home/ubuntu/prod
