@@ -45,10 +45,15 @@ jobs:
   prod:
     name: prod
     runs-on: ubuntu-latest
+
+    if: ${{ github.ref == 'refs/heads/prod' }}
     
     steps:
+      - name: 'Confirm Deployment'
+        id: confirm
+        run: echo "Do you want to deploy to production? Please confirm by setting the environment variable DEPLOY_TO_PROD=true"
       - name: 'Push on prod'
-        if: ${{ github.ref == 'refs/heads/prod' }}
+        if: env.DEPLOY_TO_PROD == 'true'
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
