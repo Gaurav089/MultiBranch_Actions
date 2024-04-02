@@ -16,14 +16,15 @@ jobs:
         run: echo "Running main pipeline"
 
   pre_prod:
-    if: github.ref == 'refs/heads/pre_prod'
+    if: github.ref == 'refs/heads/pre_prod' || success()
     runs-on: ubuntu-latest
+    needs: main
     steps:
       - name: Print branch name
         run: echo "Running pre_prod pipeline"
 
   prod:
-    if: github.ref == 'refs/heads/prod' && success()
+    if: github.ref == 'refs/heads/prod'
     runs-on: ubuntu-latest
     steps:
       - name: Print branch name
