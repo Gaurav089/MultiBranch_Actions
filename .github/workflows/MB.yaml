@@ -18,6 +18,9 @@ jobs:
       - name: Echo branch name for main
         if: ${{ github.ref == 'refs/heads/main' }}
         run: echo "This job was run on the main branch"
+      - name: Echo skipped message for main
+        if: ${{ github.ref != 'refs/heads/main' }}
+        run: echo "This job was skipped because it's not on the main branch"
 
   pre_prod:
     name: pre_prod
@@ -27,6 +30,9 @@ jobs:
       - name: Echo branch name for pre_prod
         if: ${{ github.ref == 'refs/heads/pre_prod' }}
         run: echo "This job was run on the pre_prod branch"
+      - name: Echo skipped message for pre_prod
+        if: ${{ github.ref != 'refs/heads/pre_prod' }}
+        run: echo "This job was skipped because it's not on the pre_prod branch"
 
   prod:
     name: prod
@@ -36,3 +42,13 @@ jobs:
       - name: Echo branch name for prod
         if: ${{ github.ref == 'refs/heads/prod' }}
         run: echo "This job was run on the prod branch"
+      - name: Confirm Deployment
+        if: ${{ github.ref == 'refs/heads/prod' }}
+        id: confirm
+        run: echo "Do you want to deploy to production? Please confirm by setting the environment variable DEPLOY_TO_PROD=true"
+      - name: Echo skipped message for prod
+        if: ${{ github.ref != 'refs/heads/prod' }}
+        run: echo "This job was skipped because it's not on the prod branch"
+      - name: Deploy to Prod
+        if: ${{ github.ref == 'refs/heads/prod' && env.DEPLOY_TO_PROD == 'true' }}
+        run: echo "This job was skipped because it's not on the prod branch"
