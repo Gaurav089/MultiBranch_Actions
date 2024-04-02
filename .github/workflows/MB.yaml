@@ -1,6 +1,6 @@
-name: Branch Specific Actions
+name: CI/CD Workflow
 
-on: 
+on:
   push:
     branches:
       - main
@@ -8,57 +8,23 @@ on:
       - prod
 
 jobs:
-
   main:
-    name: main
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Echo branch name for main
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run: echo "This job was run on the main branch"
-      - name: Echo skipped message for main
-        if: ${{ github.ref != 'refs/heads/main' }}
-        run: echo "This job was skipped because it's not on the main branch"
+      - name: Print branch name
+        run: echo "Running main pipeline"
 
   pre_prod:
-    name: pre_prod
+    if: github.ref == 'refs/heads/pre_prod'
     runs-on: ubuntu-latest
-  
     steps:
-      - name: Echo branch name for pre_prod
-        if: ${{ github.ref == 'refs/heads/pre_prod' }}
-        run: echo "This job was run on the pre_prod branch"
-      - name: Echo skipped message for pre_prod
-        if: ${{ github.ref != 'refs/heads/pre_prod' }}
-        run: echo "This job was skipped because it's not on the pre_prod branch"
+      - name: Print branch name
+        run: echo "Running pre_prod pipeline"
 
   prod:
-    name: prod
+    if: github.ref == 'refs/heads/prod'
     runs-on: ubuntu-latest
-
     steps:
-      - name: Echo branch name for prod
-        if: ${{ github.ref == 'refs/heads/prod' }}
-        run: echo "This job was run on the prod branch"
-      - name: Confirm Deployment
-        if: ${{ github.ref == 'refs/heads/prod' }}
-        id: confirm
-        run: echo "Do you want to deploy to production? Please confirm by setting the environment variable DEPLOY_TO_PROD=true"
-      - name: Echo skipped message for prod
-        if: ${{ github.ref != 'refs/heads/prod' }}
-        run: echo "This job was skipped because it's not on the prod branch"
-      - name: Deploy to Prod
-        if: ${{ github.ref == 'refs/heads/prod' && env.DEPLOY_TO_PROD == 'true' }}
-        # Add your deployment steps here
-        run: echo "This job was skipped because it's not on the prod branch"
-      
-  other:
-    name: other
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Echo skipped message for other branches
-        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/pre_prod' && github.ref != 'refs/heads/prod' }}
-        run: echo "This job was skipped because it's not on the main, pre_prod, or prod branch"
+      - name: Print branch name
+        run: echo "Running prod pipeline"
