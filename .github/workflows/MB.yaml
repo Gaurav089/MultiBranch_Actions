@@ -23,7 +23,7 @@ jobs:
         run: echo "Running pre_prod pipeline"
 
   prod:
-    if: github.ref == 'refs/heads/prod'
+    if: github.ref == 'refs/heads/prod' && success()
     runs-on: ubuntu-latest
     steps:
       - name: Print branch name
