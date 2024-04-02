@@ -1,0 +1,50 @@
+name: scp files
+on: 
+  push:
+    branches:
+      - main
+      - pre_prod
+      - prod
+
+jobs:
+
+  build-and-copy:
+    name: Build and Copy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: 'Push on main branch'
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.KEY }}
+          source: "*"
+          target: /home/ubuntu/main      
+         
+      
+      - name: 'Push on pre_prod'
+        if: ${{ github.ref == 'refs/heads/pre_prod' }}
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.KEY }}
+          source: "*"
+          target: /home/ubuntu/pre_prod
+
+      - name: 'Push on prod'
+        if: ${{ github.ref == 'refs/heads/prod' }}
+        uses: appleboy/scp-action@v0.1.7
+        with:
+            host: ${{ secrets.HOST }}
+            username: ${{ secrets.USERNAME }}
+            port: ${{ secrets.PORT }}
+            key: ${{ secrets.KEY }}
+            source: "*"
+            target: /home/ubuntu/prod
+  
