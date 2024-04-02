@@ -51,4 +51,14 @@ jobs:
         run: echo "This job was skipped because it's not on the prod branch"
       - name: Deploy to Prod
         if: ${{ github.ref == 'refs/heads/prod' && env.DEPLOY_TO_PROD == 'true' }}
+        # Add your deployment steps here
         run: echo "This job was skipped because it's not on the prod branch"
+      
+  other:
+    name: other
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Echo skipped message for other branches
+        if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/pre_prod' && github.ref != 'refs/heads/prod' }}
+        run: echo "This job was skipped because it's not on the main, pre_prod, or prod branch"
