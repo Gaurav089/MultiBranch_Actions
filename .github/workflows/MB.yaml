@@ -1,4 +1,4 @@
-name: scp files
+name: Branch Specific Actions
 
 on: 
   push:
@@ -15,50 +15,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: 'Push on main branch'
+      - name: Echo branch name for main
         if: ${{ github.ref == 'refs/heads/main' }}
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          port: ${{ secrets.PORT }}
-          key: ${{ secrets.KEY }}
-          source: "*"
-          target: /home/ubuntu/main
+        run: echo "This job was run on the main branch"
 
   pre_prod:
     name: pre_prod
     runs-on: ubuntu-latest
   
     steps:
-      - name: 'Push on pre_prod'
+      - name: Echo branch name for pre_prod
         if: ${{ github.ref == 'refs/heads/pre_prod' }}
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          port: ${{ secrets.PORT }}
-          key: ${{ secrets.KEY }}
-          source: "*"
-          target: /home/ubuntu/pre_prod
+        run: echo "This job was run on the pre_prod branch"
 
   prod:
     name: prod
     runs-on: ubuntu-latest
 
-    if: ${{ github.ref == 'refs/heads/prod' }}
-    
     steps:
-      - name: 'Confirm Deployment'
-        id: confirm
-        run: echo "Do you want to deploy to production? Please confirm by setting the environment variable DEPLOY_TO_PROD=true"
-      - name: 'Push on prod'
-        if: env.DEPLOY_TO_PROD == 'true'
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          port: ${{ secrets.PORT }}
-          key: ${{ secrets.KEY }}
-          source: "*"
-          target: /home/ubuntu/prod
+      - name: Echo branch name for prod
+        if: ${{ github.ref == 'refs/heads/prod' }}
+        run: echo "This job was run on the prod branch"
